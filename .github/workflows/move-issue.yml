@@ -12,23 +12,23 @@ jobs:
       - name: Move Issue to "To Do" when created
         if: github.event.action == 'opened'
         run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.inertia-preview+json" \
-               https://api.github.com/projects/columns/12345678/cards \
-               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
+          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"content_id": "${{ github.event.issue.node_id }}", "project_id": 4 , "field_id": "status", "value": "To Do"}' \
+               https://api.github.com/graphql
 
       - name: Move Issue to "In Progress" when assigned
         if: github.event.action == 'assigned'
         run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.inertia-preview+json" \
-               https://api.github.com/projects/columns/87654321/cards \
-               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
+          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"content_id": "${{ github.event.issue.node_id }}", "project_id": 4, "field_id": "status", "value": "In Progress"}' \
+               https://api.github.com/graphql
 
       - name: Move Issue to "Done" when closed
         if: github.event.action == 'closed'
         run: |
-          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               -H "Accept: application/vnd.github.inertia-preview+json" \
-               https://api.github.com/projects/columns/56781234/cards \
-               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
+          curl -X POST -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Content-Type: application/json" \
+               -d '{"content_id": "${{ github.event.issue.node_id }}", "project_id": 4, "field_id": "status", "value": "Done"}' \
+               https://api.github.com/graphql
