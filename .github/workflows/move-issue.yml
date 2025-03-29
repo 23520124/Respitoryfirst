@@ -11,27 +11,24 @@ jobs:
     steps:
       - name: Move Issue to "To Do" when created
         if: github.event.action == 'opened'
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /projects/columns/cards
-          column_id: 12345678  # ID của cột "To Do"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.inertia-preview+json" \
+               https://api.github.com/projects/columns/12345678/cards \
+               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
 
       - name: Move Issue to "In Progress" when assigned
         if: github.event.action == 'assigned'
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /projects/columns/cards
-          column_id: Y3Vyc29yOnYyOpLOCrwoVKRUb2Rv  # ID của cột "In Progress"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.inertia-preview+json" \
+               https://api.github.com/projects/columns/87654321/cards \
+               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
 
       - name: Move Issue to "Done" when closed
         if: github.event.action == 'closed'
-        uses: octokit/request-action@v2.x
-        with:
-          route: POST /projects/columns/cards
-          column_id: 56781234  # ID của cột "Done"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               -H "Accept: application/vnd.github.inertia-preview+json" \
+               https://api.github.com/projects/columns/56781234/cards \
+               -d '{"content_id": "${{ github.event.issue.id }}", "content_type": "Issue"}'
